@@ -1,6 +1,9 @@
 {% extends "base.html.twig" %}
 
 {% block body %}
+
+    {{ dump(query) }}
+
     <ol class="breadcrumb">
         <li>
             <a href="{{ path('homepage') }}">Liste des thèmes</a>
@@ -24,6 +27,7 @@
 
     <div class="col-md-6 col-md-offset-3">
         <h3 class="text-center">Nouvelle réponse</h3>
+        {{ form(answerForm) }}
     </div>
 
     {% for answer in answerList %}

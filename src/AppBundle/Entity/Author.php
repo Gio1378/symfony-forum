@@ -175,4 +175,8 @@ class Author
     {
         return $this->posts;
     }
+
+    public function getFullName(){
+        return $this->firstName. ' '. $this->name;
+    }
 }

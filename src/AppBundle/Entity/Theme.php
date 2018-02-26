@@ -36,7 +36,7 @@ class Theme
 
     /**
      * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="Post", mappedBy="theme")
+     * @ORM\OneToMany(targetEntity="Post", mappedBy="theme", fetch="EAGER")
      */
     private $posts;
 

@@ -10,4 +10,15 @@ namespace AppBundle\Repository;
  */
 class AnswerRepository extends \Doctrine\ORM\EntityRepository
 {
+
+    public function getAnswersByPost($post){
+        $qb = $this->createQueryBuilder('a');
+        $qb ->select('a.author, a.text, a.createdAt')
+            ->orderBy('a.createdAt','desc')
+            ->innerJoin('a.post','p')
+            ->where('a.post=?1')
+            ->setParameter(1, $post);
+
+        return $qb;
+    }
 }

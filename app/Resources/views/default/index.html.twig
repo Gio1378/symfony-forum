@@ -23,4 +23,30 @@
 
 {% endblock %}
 
+{% block aside %}
+
+    <h3>Les derniers articles</h3>
+    <ul>
+        {% for post in lastPosts %}
+            <li>
+                <a href="{{ path('post_details', {id:post.id}) }}">
+                    {{ post.title }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <h3>Les auteur</h3>
+    <ul>
+        {% for author in authorSummary %}
+            <li>
+                <a href="{{ path('post_par_auteur', {id:author.id}) }}">
+                    {{ author.firstName }} {{ author.name | upper }} ({{ author.numberOfPosts }})
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}
+
 

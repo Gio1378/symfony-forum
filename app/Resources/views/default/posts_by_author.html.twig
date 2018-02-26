@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <h2>Liste des articles de : {{ author.fullName }}</h2>
+
+    <table class="table">
+        <tr>
+            <th>Titre</th>
+            <th>Thème</th>
+        </tr>
+        {% for post in postList %}
+            <tr>
+                <td>{{ post.title }}</td>
+                <td>{{ post.theme.name }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+{% endblock %}
+
+{% block aside %}
+
+{% endblock %}
+
