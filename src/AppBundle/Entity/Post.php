@@ -13,6 +13,12 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Table(name="posts")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\PostRepository")
  * @Gedmo\Loggable(logEntryClass="AppBundle\Entity\Log")
+ * @Gedmo\Uploadable(
+ *     allowOverwrite=true,
+ *     filenameGenerator="SHA1",
+ *     allowedTypes="image/jpeg,image/png",
+ *     maxSize="20000000"
+ * )
  */
 class Post
 {
@@ -68,6 +74,13 @@ class Post
      */
     private $answers;
 
+    /**
+     * @var string
+     * @ORM\Column(name="image", type="string", length=255, nullable=true)
+     * @Gedmo\UploadableFileName()
+     */
+    private $image;
+
 
     /**
      * Constructor
@@ -75,6 +88,24 @@ class Post
     public function __construct()
     {
         $this->answers = new ArrayCollection();
+    }
+
+    /**
+     * @return string
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    /**
+     * @param string $image
+     * @return Post
+     */
+    public function setImage($image)
+    {
+        $this->image = $image;
+        return $this;
     }
 
 

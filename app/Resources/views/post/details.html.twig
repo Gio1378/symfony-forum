@@ -17,6 +17,10 @@
 
     <h1>{{ post.title }}</h1>
 
+    {% if post.image is defined %}
+        <img src="/images/post/{{ post.image }}">
+    {% endif %}
+
     <p>par {{ post.author.email }} le {{ post.createdAt | date('d/m/Y') }}</p>
 
 

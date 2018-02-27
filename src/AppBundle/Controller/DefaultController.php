@@ -4,10 +4,10 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Author;
 use AppBundle\Entity\Post;
-use AppBundle\Form\AuthorType;
 use AppBundle\Form\PostType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -75,12 +75,22 @@ class DefaultController extends Controller
 
             //Sauvegarde des données si le formulaire est correct
             if($form->isSubmitted() && $form->isValid()){
+
+                dump($post->getImage());
+
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($post);
+
+                if($post->getImage() instanceof UploadedFile){
+                    $uploadManager = $this->get('stof_doctrine_extensions.uploadable.manager');
+                    $uploadManager->markEntityToUpload($post, $post->getImage());
+                }
+
                 $em->flush();
 
                 //Redirection pour éviter de rester en POST
                 return $this->redirectToRoute("theme_details", ["id"=>$id]);
+
             }
 
             $formView = $form->createView();
