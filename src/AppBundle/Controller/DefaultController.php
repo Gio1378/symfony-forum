@@ -34,7 +34,8 @@ class DefaultController extends Controller
             [
                 "themeList" => $list,
                 "lastPosts" => $postRepository->getLastPosts(5)->getResult(),
-                "authorSummary" => $authorRepository->getAuthorSummary()->getResult()
+                "authorSummary" => $authorRepository->getAuthorSummary()->getResult(),
+                "yearSummary" => $postRepository->getNumberOfPostsByYear()->getResult()
             ]);
     }
 
@@ -99,7 +100,40 @@ class DefaultController extends Controller
 
         return $this->render("default/posts_by_author.html.twig", [
            "postList" => $posts,
-            "author" => $author
+            "condition" => $author->getFullName()
         ]);
+    }
+
+    /**
+     * @Route("/posts-par-annee/{year}", name="post_by_year", requirements={"year"="\d{4}"})
+     * @param $year
+     */
+    public function postsByYearAction($year){
+        $postRepository = $this->getDoctrine()->getRepository("AppBundle:Post");
+        $posts = $postRepository->getPostsByYear($year)->getResult();
+
+        return $this->render("default/posts_by_author.html.twig", [
+           "condition" => "l'année $year",
+            "postList" => $posts
+        ]);
+    }
+
+    /**
+     * @Route("/admin-login", name="admin_login_route")
+     */
+    public function adminLoginAction(){
+
+        //Récupération des erreurs
+        $securityUtils = $this->get('security.authentication_utils');
+
+
+        return $this->render(
+            "default/login-form.html.twig",
+            [
+                "action" => $this->generateUrl("admin_check_route"),
+                "error" => $securityUtils->getLastAuthenticationError(),
+                "userName" => $securityUtils->getLastUsername()
+            ]
+        );
     }
 }

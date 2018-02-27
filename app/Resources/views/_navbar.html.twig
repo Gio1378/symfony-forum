@@ -17,7 +17,20 @@
                 <li><a href="{{ path('homepage') }}">Forum</a></li>
             </ul>
 
-            <ul class="nav navbar-nav navbar-right">
+            <ul class="nav navbar-nav navbar-right" style="color:#FFF;">
+                {% if is_granted('ROLE_ADMIN') %}
+                    <li>
+                        <a href="{{ path('admin_logout') }}">
+                            Déconnexion admin
+                        </a>
+                    </li>
+                {%  else %}
+                    <li>
+                        <a href="{{ path('admin_home') }}">
+                            Connexion admin
+                        </a>
+                    </li>
+                {% endif %}
             </ul>
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->

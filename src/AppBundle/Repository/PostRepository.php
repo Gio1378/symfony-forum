@@ -20,4 +20,24 @@ class PostRepository extends \Doctrine\ORM\EntityRepository
 
         return $qb->getQuery();
     }
+
+    public function getNumberOfPostsByYear(){
+        $qb = $this->createQueryBuilder('p');
+
+        $qb->select('YEAR(p.createdAt) as yearPublished, COUNT(p.id) as numberOfPosts')
+            ->groupBy('yearPublished')->orderBy('yearPublished', 'DESC');
+
+        return $qb->getQuery();
+    }
+
+    public function getPostsByYear($year){
+        $qb = $this->createQueryBuilder('p');
+
+        $qb ->select('p')
+            ->where('YEAR(p.createdAt)=:year')
+            ->orderBy('p.createdAt', 'DESC')
+            ->setParameter('year', $year);
+
+        return $qb->getQuery();
+    }
 }

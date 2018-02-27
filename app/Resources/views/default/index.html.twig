@@ -47,6 +47,17 @@
         {% endfor %}
     </ul>
 
+    <h3>Historique</h3>
+    <ul>
+        {% for item in yearSummary %}
+            <li>
+                <a href="{{ path('post_by_year', {year:item.yearPublished}) }}">
+                    {{ item.yearPublished }} ( {{ item.numberOfPosts }} )
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+
 {% endblock %}
 
 
