@@ -9,9 +9,15 @@ security:
               users:
                 admin: { password: 123, roles: ['ROLE_ADMIN'] }
                 god: { password: 777, roles: ['ROLE_ROOT'] }
+        author_provider:
+            entity:
+                class: AppBundle:Author
+                property: email
 
     encoders:
         Symfony\Component\Security\Core\User\User: plaintext
+        AppBundle\Entity\Author:
+            algorithm: bcrypt
 
     role_hierarchy:
         ROLE_ROOT: ['ROLE_ADMIN', 'ROLE_ALLOWED_TO_SWITCH']
@@ -38,9 +44,16 @@ security:
                 path: admin_logout
                 target: homepage
 
-
         main:
-            anonymous: ~
+            pattern: ^/
+            anonymous: true
+            provider: author_provider
+            form_login:
+                login_path: author_login_route
+                check_path: author_check_route
+            logout:
+                path: author_logout
+                target: homepage
             # activate different ways to authenticate
 
             # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate

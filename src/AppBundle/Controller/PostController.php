@@ -21,12 +21,12 @@ class PostController extends Controller
 
     /**
      * @param $id
-     * @Route("/post/{id}",
+     * @Route("/post/{slug}",
      *          name="post_details"
      * )
      * @return Response
      */
-    public function detailsAction($id, Request $request){
+    public function detailsAction($slug, Request $request){
 
         $postRepository = $this->getDoctrine()
             ->getRepository("AppBundle:Post");
@@ -35,7 +35,7 @@ class PostController extends Controller
             ->getRepository("AppBundle:Answer");
 
         /** @var $post Post */
-        $post = $postRepository->findOneById($id);
+        $post = $postRepository->findOneBySlug($slug);
 
         if(! $post){
             throw new NotFoundHttpException("post introuvable");
@@ -54,7 +54,7 @@ class PostController extends Controller
             $em->persist($answer);
             $em->flush();
 
-            return $this->redirectToRoute("post_details", ["id"=>$id]);
+            return $this->redirectToRoute("post_details", ["slug"=>$slug]);
         }
 
         return $this->render("post/details.html.twig", [

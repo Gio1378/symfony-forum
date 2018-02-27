@@ -18,6 +18,25 @@
             </ul>
 
             <ul class="nav navbar-nav navbar-right" style="color:#FFF;">
+
+                {% if is_granted('ROLE_AUTHOR') %}
+                    <li class="navbar-text">
+                        bonjour {{ app.user.fullName }}
+                    </li>
+                    <li>
+                        <a href="{{ path('author_logout') }}">
+                            Déconnexion auteur
+                        </a>
+                    </li>
+                {%  else %}
+                    <li>
+                        <a href="{{ path('author_login_route') }}">
+                            Connexion auteur
+                        </a>
+                    </li>
+                {% endif %}
+
+
                 {% if is_granted('ROLE_ADMIN') %}
                     <li>
                         <a href="{{ path('admin_logout') }}">

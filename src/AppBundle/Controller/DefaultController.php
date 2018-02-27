@@ -59,34 +59,42 @@ class DefaultController extends Controller
             throw new NotFoundHttpException("Thème introuvable");
         }
 
-        //Création du formulaire
-        $post = new Post();
-        $post   ->setTheme($theme)
-                ->setCreatedAt(new \DateTime());
-                //->setAuthor($authorRepository->findOneByName("Hugo"));
-        $form = $this->createForm(PostType::class, $post, [
-            'attr'=>['novalidate'=>'novalidate']
-        ]);
+        if($this->getUser() != null){
+            //Création du formulaire
+            $post = new Post();
+            $post   ->setTheme($theme)
+                ->setCreatedAt(new \DateTime())
+                ->setAuthor($this->getUser());
 
-        //Traitement du formulaire
-        $form->handleRequest($request);
+            $form = $this->createForm(PostType::class, $post, [
+                'attr'=>['novalidate'=>'novalidate']
+            ]);
 
-        //Sauvegarde des données si le formulaire est correct
-        if($form->isSubmitted() && $form->isValid()){
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($post);
-            $em->flush();
+            //Traitement du formulaire
+            $form->handleRequest($request);
 
-            //Redirection pour éviter de rester en POST
-            return $this->redirectToRoute("theme_details", ["id"=>$id]);
+            //Sauvegarde des données si le formulaire est correct
+            if($form->isSubmitted() && $form->isValid()){
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($post);
+                $em->flush();
+
+                //Redirection pour éviter de rester en POST
+                return $this->redirectToRoute("theme_details", ["id"=>$id]);
+            }
+
+            $formView = $form->createView();
+        } else {
+            $formView = null;
         }
+
 
 
         return $this->render('default/theme.html.twig', [
             "theme" => $theme,
             "postList" => $theme->getPosts(),
             "all" => $allThemes,
-            "newPostForm" => $form->createView()
+            "newPostForm" => $formView
         ]);
     }
 
@@ -131,6 +139,25 @@ class DefaultController extends Controller
             "default/login-form.html.twig",
             [
                 "action" => $this->generateUrl("admin_check_route"),
+                "error" => $securityUtils->getLastAuthenticationError(),
+                "userName" => $securityUtils->getLastUsername()
+            ]
+        );
+    }
+
+    /**
+     * @Route("/author-login", name="author_login_route")
+     */
+    public function authorLoginAction(){
+
+        //Récupération des erreurs
+        $securityUtils = $this->get('security.authentication_utils');
+
+
+        return $this->render(
+            "default/login-form.html.twig",
+            [
+                "action" => $this->generateUrl("author_check_route"),
                 "error" => $securityUtils->getLastAuthenticationError(),
                 "userName" => $securityUtils->getLastUsername()
             ]

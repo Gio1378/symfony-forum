@@ -29,7 +29,7 @@
     <ul>
         {% for post in lastPosts %}
             <li>
-                <a href="{{ path('post_details', {id:post.id}) }}">
+                <a href="{{ path('post_details', {slug:post.slug}) }}">
                     {{ post.title }}
                 </a>
             </li>

@@ -20,7 +20,7 @@
     <p>par {{ post.author.email }} le {{ post.createdAt | date('d/m/Y') }}</p>
 
 
-    <p>{{ post.text}}</p>
+    <p>{{ post.text | purify }}</p>
 
     <hr>
     <h2>Les réponses ({{ post.answers | length }})</h2>

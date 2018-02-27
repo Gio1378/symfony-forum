@@ -14,7 +14,7 @@ class PostRepository extends \Doctrine\ORM\EntityRepository
     public function getLastPosts($number){
         $qb = $this->createQueryBuilder('p');
 
-        $qb->select('p.title, p.id')
+        $qb->select('p.title, p.id, p.slug')
             ->orderBy('p.createdAt', 'desc')
             ->setMaxResults($number);
 

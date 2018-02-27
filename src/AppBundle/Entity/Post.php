@@ -5,12 +5,14 @@ namespace AppBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Post
  *
  * @ORM\Table(name="posts")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\PostRepository")
+ * @Gedmo\Loggable(logEntryClass="AppBundle\Entity\Log")
  */
 class Post
 {
@@ -27,6 +29,7 @@ class Post
      * @var string
      * @Assert\NotBlank(message="Le titre ne peut être vide")
      * @ORM\Column(name="title", type="string", length=80)
+     * @Gedmo\Versioned()
      */
     private $title;
 
@@ -34,8 +37,16 @@ class Post
      * @var string
      * @Assert\NotBlank(message="Le texte ne peut être vide")
      * @ORM\Column(name="post_text", type="text")
+     * @Gedmo\Versioned()
      */
     private $text;
+
+    /**
+     * @var string
+     * @ORM\Column(name="slug", type="text", nullable=true)
+     * @Gedmo\Slug(fields={"title", "createdAt"})
+     */
+    private $slug;
 
     /**
      * @var Author
@@ -46,6 +57,7 @@ class Post
 
     /**
      * @var Theme
+     *
      * @ORM\ManyToOne(targetEntity="Theme", inversedBy="posts")
      */
     private $theme;
@@ -242,4 +254,24 @@ class Post
     {
         return $this->answers;
     }
+
+    /**
+     * @return string
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+    /**
+     * @param string $slug
+     * @return Post
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+        return $this;
+    }
+
+
 }

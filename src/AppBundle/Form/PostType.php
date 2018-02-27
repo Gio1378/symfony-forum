@@ -30,13 +30,14 @@ class PostType extends AbstractType
             )
             ->add('createdAt', DateType::class,
                 ['label' => 'date de publication', 'widget'=>'single_text'])
+            /*
             ->add('author', EntityType::class, [
                 'class' => 'AppBundle\Entity\Author',
                 'placeholder' => 'Choisissez un auteur',
                 'choice_label' => 'fullName',
                 //'expanded' => true,
                 //'multiple' => true
-            ])
+            ])*/
             //->add('theme')
             ->add('submit', SubmitType::class,
                 ['label'=>'Valider'])

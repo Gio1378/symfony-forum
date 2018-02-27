@@ -101,4 +101,11 @@ swiftmailer:
     password: '%mailer_password%'
     spool: { type: memory }
 
+stof_doctrine_extensions:
+    default_locale: fr_FR
+    orm:
+      default:
+        sluggable: true
+        loggable: true
+
 
