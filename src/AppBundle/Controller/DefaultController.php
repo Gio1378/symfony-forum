@@ -37,7 +37,8 @@ class DefaultController extends Controller
                 "themeList" => $list,
                 "lastPosts" => $postRepository->getLastPosts(5)->getResult(),
                 "authorSummary" => $authorRepository->getAuthorSummary()->getResult(),
-                "yearSummary" => $postRepository->getNumberOfPostsByYear()->getResult()
+                "yearSummary" => $postRepository->getNumberOfPostsByYear()->getResult(),
+                "message" => $this->get("app.hello")->greet()
             ]);
     }
 
