@@ -30,12 +30,19 @@
                     </li>
                 {%  else %}
                     <li>
+                        <a href="{{ path('register_author') }}">
+                            inscription auteur
+                        </a>
+                    </li>
+
+                    <li>
                         <a href="{{ path('author_login_route') }}">
                             Connexion auteur
                         </a>
                     </li>
                 {% endif %}
 
+                <li class="navbar-text hidden-xs">|</li>
 
                 {% if is_granted('ROLE_ADMIN') %}
                     <li>

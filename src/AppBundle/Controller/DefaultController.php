@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Author;
 use AppBundle\Entity\Post;
+use AppBundle\Form\AuthorType;
 use AppBundle\Form\PostType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -11,6 +12,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class DefaultController extends Controller
 {
@@ -172,5 +174,50 @@ class DefaultController extends Controller
                 "userName" => $securityUtils->getLastUsername()
             ]
         );
+    }
+
+    /**
+     * @Route("/inscription-auteur", name="register_author")
+     */
+    public function registerAuthorAction(Request $request){
+
+        //Création d'une instance d'auteur
+        $author = new Author();
+
+        //Création du formulaire
+        $form = $this->createForm(
+            AuthorType::class,
+            $author
+        );
+
+        //hydratation de l'entité à partir des données de la requête
+        $form->handleRequest($request);
+
+        //Traitement des données postées
+        if($form->isSubmitted() && $form->isValid()){
+            $password = password_hash($author->getPlainPassword(), PASSWORD_BCRYPT);
+            $author->setPassword($password);
+
+            //Sauvegarde de l'entité
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($author);
+            $em->flush();
+
+            //Message flash
+            $this->addFlash('info', 'Vous êtes inscrits');
+
+            //Authentification de l'utilisateur qui vient de s'inscrire
+            //Création d'un  token à partir des données de l'auteur
+            $token = new UsernamePasswordToken($author, null, 'main', $author->getRoles());
+            //Stockage du token en session
+            $this->get("security.token_storage")->setToken($token);
+
+            return $this->redirectToRoute('homepage');
+        }
+
+        return $this->render('default/register_author.html.twig', [
+            'registerForm' => $form->createView()
+        ]);
+
     }
 }

@@ -20,9 +20,20 @@
 
 
 
-
         <div class="row">
             <div class="col-md-7 col-md-offset-1">
+
+
+                {% set infos = app.session.getFlashBag().get('info') %}
+
+                {% if infos is defined  and infos | length > 0%}
+                    <div class="alert alert-info">
+                        {% for message in infos %}
+                            <p>{{ message }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
                 {% block body %}{% endblock %}
             </div>
 

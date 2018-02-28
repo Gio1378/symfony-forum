@@ -56,6 +56,11 @@ class Author implements \Serializable, UserInterface
      */
     private $password;
 
+    /**
+     * @var string
+     */
+    private $plainPassword;
+
 
     /**
      * Constructor
@@ -64,6 +69,25 @@ class Author implements \Serializable, UserInterface
     {
         $this->posts = new ArrayCollection();
     }
+
+    /**
+     * @return string
+     */
+    public function getPlainPassword()
+    {
+        return $this->plainPassword;
+    }
+
+    /**
+     * @param string $plainPassword
+     * @return Author
+     */
+    public function setPlainPassword($plainPassword)
+    {
+        $this->plainPassword = $plainPassword;
+        return $this;
+    }
+
 
 
     /**
