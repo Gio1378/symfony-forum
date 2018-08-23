@@ -24,6 +24,19 @@ class Post
 {
 
     /**
+     * @var theme
+     * @ORM\OneToOne(targetEntity="Theme")
+     */
+    private $theme;
+
+    /**
+     * @var user
+     * @ORM\ManyToOne(targetEntity="User",
+     *     inversedBy="posts")
+     */
+    private $user;
+
+    /**
      * @var integer
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id()
@@ -34,14 +47,16 @@ class Post
     /**
      * @var string
      * @ORM\Column(name="subject", type="string", nullable=false, length=250)
+     * @ORM\ManyToOne(targetEntity="User",
+     *     inversedBy="posts")
      */
     private $subject;
 
     /**
      * @var \DateTime
-     * @ORM\Column(name="createad_at", type="datetime", nullable=false)
+     * @ORM\Column(name="created_at", type="datetime", nullable=false)
      */
-    private $createadAt;
+    private $createdAt;
 
     /**
      * @var string
@@ -87,13 +102,13 @@ class Post
     /**
      * Set createadAt.
      *
-     * @param \DateTime $createadAt
+     * @param \DateTime $createdAt
      *
      * @return Post
      */
-    public function setCreateadAt($createadAt)
+    public function setCreatedAt($createdAt)
     {
-        $this->createadAt = $createadAt;
+        $this->createdAt = $createdAt;
 
         return $this;
     }
@@ -103,9 +118,9 @@ class Post
      *
      * @return \DateTime
      */
-    public function getCreateadAt()
+    public function getCreatedAt()
     {
-        return $this->createadAt;
+        return $this->createdAt;
     }
 
     /**
@@ -130,5 +145,53 @@ class Post
     public function getText()
     {
         return $this->text;
+    }
+
+    /**
+     * Set theme.
+     *
+     * @param \ForumBundle\Entity\Theme|null $theme
+     *
+     * @return Post
+     */
+    public function setTheme(\ForumBundle\Entity\Theme $theme = null)
+    {
+        $this->theme = $theme;
+
+        return $this;
+    }
+
+    /**
+     * Get theme.
+     *
+     * @return \ForumBundle\Entity\Theme|null
+     */
+    public function getTheme()
+    {
+        return $this->theme;
+    }
+
+    /**
+     * Set user.
+     *
+     * @param \ForumBundle\Entity\User|null $user
+     *
+     * @return Post
+     */
+    public function setUser(\ForumBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user.
+     *
+     * @return \ForumBundle\Entity\User|null
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 }

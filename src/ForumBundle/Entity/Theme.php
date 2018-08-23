@@ -20,6 +20,14 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Theme {
 
+
+    /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="Post",
+     *     mappedBy="theme")
+     */
+    private $posts;
+
     /**
      * @var integer
      * @ORM\Column(name="id", type="integer")
@@ -29,10 +37,10 @@ class Theme {
     private $id;
 
     /**
-     * @var ArrayCollection
-     * @ORM\ManyToOne()
+     * @var string
+     * @ORM\Column(name="title", type="string", nullable=false)
      */
-    private $subjects;
+    private $title;
 
 
 
@@ -45,28 +53,71 @@ class Theme {
     {
         return $this->id;
     }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->posts = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
-     * Set subject.
+     * Set title.
      *
-     * @param string $subjects
+     * @param string $title
      *
      * @return Theme
      */
-    public function setSubject($subjects)
+    public function setTitle($title)
     {
-        $this->subjects = $subjects;
+        $this->title = $title;
 
         return $this;
     }
 
     /**
-     * Get subject.
+     * Get title.
      *
      * @return string
      */
-    public function getSubject()
+    public function getTitle()
     {
-        return $this->subject;
+        return $this->title;
+    }
+
+    /**
+     * Add post.
+     *
+     * @param \ForumBundle\Entity\Post $post
+     *
+     * @return Theme
+     */
+    public function addPost(\ForumBundle\Entity\Post $post)
+    {
+        $this->posts[] = $post;
+
+        return $this;
+    }
+
+    /**
+     * Remove post.
+     *
+     * @param \ForumBundle\Entity\Post $post
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removePost(\ForumBundle\Entity\Post $post)
+    {
+        return $this->posts->removeElement($post);
+    }
+
+    /**
+     * Get posts.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPosts()
+    {
+        return $this->posts;
     }
 }

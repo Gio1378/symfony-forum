@@ -26,7 +26,6 @@ class User
      * @ORM\OneToMany(
      *     targetEntity="Post",
      *     mappedBy="user")
-     *
      */
     private $posts;
 
