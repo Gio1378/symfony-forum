@@ -8,6 +8,7 @@
 namespace ForumBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use ForumBundle\Entity\Post;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -58,7 +59,7 @@ class Theme {
      */
     public function __construct()
     {
-        $this->posts = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->posts = new ArrayCollection();
     }
 
     /**
@@ -92,7 +93,7 @@ class Theme {
      *
      * @return Theme
      */
-    public function addPost(\ForumBundle\Entity\Post $post)
+    public function addPost(Post $post)
     {
         $this->posts[] = $post;
 
@@ -102,11 +103,11 @@ class Theme {
     /**
      * Remove post.
      *
-     * @param \ForumBundle\Entity\Post $post
+     * @param Post $post
      *
      * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
      */
-    public function removePost(\ForumBundle\Entity\Post $post)
+    public function removePost(Post $post)
     {
         return $this->posts->removeElement($post);
     }
@@ -114,7 +115,7 @@ class Theme {
     /**
      * Get posts.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return arrayCollection
      */
     public function getPosts()
     {

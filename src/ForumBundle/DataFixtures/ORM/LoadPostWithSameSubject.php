@@ -3,6 +3,7 @@
 namespace ForumBundle\DataFixtures\ORM;
 
 use ForumBundle\Entity\Post;
+use ForumBundle\Entity\Theme;
 use ForumBundle\Entity\User;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
@@ -17,41 +18,47 @@ class LoadPostWithSameSubject extends AbstractFixture implements OrderedFixtureI
 {
 
     /**
-     * Load data fixtures with th passed EntityManager
-     * @param \Doctrine\Common\Persistence\ObjectManager $manager
+     * @param ObjectManager $manager
+     * @throws \Exception
      */
     public function load(ObjectManager $manager)
     {
-
+        return null;
         $faker = Factory::create();
+
         $numberOfPosts = 150;
 
         for ($i = 0; $i < $numberOfPosts; $i++) {
 
-            $numberOfAnswers = mt_rand(0, 20);
+            $numberOfAnswers = mt_rand(0, 15);
 
             for ($k = 0; $k < $numberOfAnswers; $k++) {
                 /**
                  * @var Post
                  */
-                $user = $this->getReference("user_$i");
-                $subpost= $this->getReference("post_$i");
+                $post = $this->getReference("post_$i");
 
-                $publishedAt = $subpost->getCreatedAt();
-                $subpostDate = $publishedAt->add(new \DateInterval("P".mt_rand(0,30)."D"));
-                $subpost = new Post();
-                $subpost->setSubject($subpost);
-                $subpost->setText($faker->text(200))
+                /**
+                 * @var User
+                 */
+                $user = $this->getReference("user_" . mt_rand(0, 15));
+
+
+                $publishedAt = $post->getCreatedAt();
+                $subPostDate = $publishedAt->add(new \DateInterval("P" . mt_rand(0, 30) . "D"));
+                $subPost = new Post();
+                $subPost->setSubject($post->getSubject());
+                $subPost->setText($faker->text(200))
                     ->setUser($user)
-                    ->setCreatedAt($subpostDate);
+                    ->setCreatedAt($subPostDate)
+                    ->setTheme($post)
+                    ->setSubPost($post);
 
-
-                $manager->persist($subpost);
+                $manager->persist($subPost);
             }
 
             $manager->flush();
         }
-
     }
 
     /**

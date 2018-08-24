@@ -3,6 +3,7 @@
 namespace ForumBundle\DataFixtures\ORM;
 
 use ForumBundle\Entity\Post;
+use ForumBundle\Entity\Theme;
 use ForumBundle\Entity\User;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
@@ -46,9 +47,16 @@ class LoadThemesPostsUsers extends AbstractFixture implements OrderedFixtureInte
         );
 
         $users = array();
+        $numberOfThemes = 5;
 
-        $numberOfPosts = 150;
+        for ($i = 0; $i < $numberOfThemes; $i++) {
+            $theme = new Theme();
+            $theme->setTitle($faker->jobTitle);
 
+            $this->addReference("theme_$i", $theme);
+            $manager->persist($theme);
+
+        }
         for ($i = 0; $i < count($emailList); $i++) {
             $users[] = new User();
             $users[$i]->setName($faker->lastName)
@@ -58,19 +66,27 @@ class LoadThemesPostsUsers extends AbstractFixture implements OrderedFixtureInte
                 ->setPassword(sha1('123'));
 
             $manager->persist($users[$i]);
+
         }
-        for ($i = 0; $i < $numberOfPosts; $i++) {
+        for ($i = 0; $i < 150; $i++) {
+
+            /**
+             * @var Theme
+             */
+            $theme = $this->getReference("theme_" . mt_rand(0, 4));
+
             $post = new Post();
             $post->setSubject($faker->sentence)
                 ->setText($faker->text(2500))
                 ->setUser($users[mt_rand(0, count($users) - 1)])
-                ->setCreatedAt($faker->dateTimeThisDecade());
+                ->setCreatedAt($faker->dateTimeThisDecade())
+                ->setTheme($theme);
 
-            $this->setReference("user_$i", $post);
-            $this->setReference("theme_$i", $post);
+            $this->addReference("post_$i", $post);
 
             $manager->persist($post);
         }
+
 
         $manager->flush();
     }

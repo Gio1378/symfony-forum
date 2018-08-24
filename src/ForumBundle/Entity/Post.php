@@ -8,9 +8,10 @@
 
 namespace ForumBundle\Entity;
 
+
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-
+use ForumBundle\Entity\Theme;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -24,8 +25,8 @@ class Post
 {
 
     /**
-     * @var theme
-     * @ORM\OneToOne(targetEntity="Theme")
+     * @var Theme
+     * @ORM\ManyToOne(targetEntity="Theme")
      */
     private $theme;
 
@@ -46,11 +47,23 @@ class Post
 
     /**
      * @var string
-     * @ORM\Column(name="subject", type="string", nullable=false, length=250)
-     * @ORM\ManyToOne(targetEntity="User",
-     *     inversedBy="posts")
+     * @ORM\Column(name="subject", type="string", length=250)
      */
     private $subject;
+
+    /**
+     * @var Post
+     * @ORM\ManyToOne(targetEntity="Post",
+     *     inversedBy="answers")
+     */
+    private $subPost;
+
+    /**
+     * @var arrayCollection
+     * @ORM\OneToMany(targetEntity="Post",
+     *     mappedBy="subPost")
+     */
+    private $answers;
 
     /**
      * @var \DateTime
@@ -63,7 +76,6 @@ class Post
      * @ORM\Column(name="description", type="text", nullable=false)
      */
     private $text;
-
 
     /**
      * Get id.
@@ -100,7 +112,31 @@ class Post
     }
 
     /**
-     * Set createadAt.
+     * Set answers.
+     *
+     * @param string $answers
+     *
+     * @return Post
+     */
+    public function setAnswers($answers)
+    {
+        $this->answers = $answers;
+
+        return $this;
+    }
+
+    /**
+     * Get answers.
+     *
+     * @return string
+     */
+    public function getAnswers()
+    {
+        return $this->answers;
+    }
+
+    /**
+     * Set createdAt.
      *
      * @param \DateTime $createdAt
      *
@@ -114,7 +150,7 @@ class Post
     }
 
     /**
-     * Get createadAt.
+     * Get createdAt.
      *
      * @return \DateTime
      */
@@ -194,4 +230,36 @@ class Post
     {
         return $this->user;
     }
+
+    /**
+     * Set post.
+     *
+     * @param \ForumBundle\Entity\Post|null $subPost
+     *
+     * @return Post
+     */
+    public function setSubPost(\ForumBundle\Entity\Post $subPost = null)
+    {
+        $this->subPost = $subPost;
+
+        return $this;
+    }
+
+    /**
+     * Get post.
+     *
+     * @return \ForumBundle\Entity\Post|null
+     */
+    public function getSubPost()
+    {
+        return $this->subPost;
+    }
+
+//    /**
+//     * @ORM\PrePersist()
+//     */
+//    public function prePersistEvent(){
+//        $this->createdAt = new \DateTime();
+//    }
+
 }
